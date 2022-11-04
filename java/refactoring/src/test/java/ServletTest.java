@@ -66,6 +66,7 @@ public class ServletTest {
                     = client.send(request, HttpResponse.BodyHandlers.ofString());
             Assert.assertEquals(200, response.statusCode());
             Assert.assertEquals("<html><body>\n" +
+                    "<h1>All products: </h1>\n" +
                     "product_0\t0</br>\n" +
                     "product_1\t1</br>\n" +
                     "product_2\t2</br>\n" +

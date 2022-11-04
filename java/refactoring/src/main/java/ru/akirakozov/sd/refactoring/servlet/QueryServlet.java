@@ -1,6 +1,8 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
+import org.eclipse.jetty.server.Response;
 import ru.akirakozov.sd.refactoring.dao.Dao;
+import ru.akirakozov.sd.refactoring.http.ResponseWriter;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 /**
  * @author akirakozov
@@ -27,43 +30,41 @@ public class QueryServlet extends HttpServlet {
 
         if ("max".equals(command)) {
             try {
-                Dao.Product product = dao.getMax();
-                response.getWriter().println("<html><body>");
-                response.getWriter().println("<h1>Product with max price: </h1>");
-                response.getWriter().println(product.getName()
-                        + "\t" + product.getPrice() + "</br>");
-                response.getWriter().println("</body></html>");
+                ResponseWriter.writeProducts(
+                        response,
+                        "Product with max price",
+                        List.of(dao.getMax())
+                );
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else if ("min".equals(command)) {
             try {
-                Dao.Product product = dao.getMin();
-                response.getWriter().println("<html><body>");
-                response.getWriter().println("<h1>Product with min price: </h1>");
-                response.getWriter().println(product.getName()
-                        + "\t" + product.getPrice() + "</br>");
-                response.getWriter().println("</body></html>");
+                ResponseWriter.writeProducts(
+                        response,
+                        "Product with min price",
+                        List.of(dao.getMin())
+                );
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else if ("sum".equals(command)) {
             try {
-                long sum = dao.getSum();
-                response.getWriter().println("<html><body>");
-                response.getWriter().println("Summary price: ");
-                response.getWriter().println(sum);
-                response.getWriter().println("</body></html>");
+                ResponseWriter.writeLong(
+                        response,
+                        "Summary price",
+                        dao.getSum()
+                );
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else if ("count".equals(command)) {
             try {
-                long count = dao.getCount();
-                response.getWriter().println("<html><body>");
-                response.getWriter().println("Number of products: ");
-                response.getWriter().println(count);
-                response.getWriter().println("</body></html>");
+                ResponseWriter.writeLong(
+                        response,
+                        "Number of products",
+                        dao.getCount()
+                );
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
